@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+
+</head>
+
+<body>
+    <main class="container">
+        <h1>11 - 8 = 4 방지기 | <span id ="mode_str">덧셈</span></h1>
+
+        <article>
+                <div style="margin-left: auto; margin-right: auto;">
+                    <a href="#" onclick="setmode('a')" role="button">덧셈</a>
+                    <a href="#" onclick="setmode('s')" role="button">뺄셈</a>
+                    <a href="#" onclick="setmode('m')" role="button">곱셈</a>
+                    <a href="#" onclick="setmode('d')" role="button">나눗셈</a>
+                </div>
+
+        </article>
+
+        <article style="text-align: center;">
+            <grid>
+                <h1 style="margin: 0;" id="problem_box">
+                    11 - 4
+                </h1>
+                <h1 style="margin: 0;">
+                    <input id="answer_input" type="text" style="margin: 0; height: 43px; text-align: center;" >
+
+                </h1>
+            </grid>
+        </article>
+
+
+    </main>
+</body>
+
+<script>
+let type = "a"
+let the_answer = null
+//  a for add
+//  s for subtract
+//  m to multiply
+//  d to divide
+function getRandomArbitrary(min, max) {
+  
+    return parseInt(Math.random() * (max - min) + min);
+
+}
+
+function isInt(n) {
+   return n % 1 === 0;
+}
+function load_new_problem() {
+    if( type == "a" ){ 
+        num1 = getRandomArbitrary(2, 10)
+        num2 = getRandomArbitrary(1, 10)
+        the_answer = num1 + num2
+        
+        qs("#problem_box").innerHTML = `${num1} + ${num2}`
+    };
+    if( type == "s" ){ 
+        num1 = null
+        num2 = null
+        while (true) {
+            num1 = getRandomArbitrary(2, 10)
+            num2 = getRandomArbitrary(1, 10)
+            if( num1 - num2 < 1 ) {
+                continue
+            }
+            break
+
+        }
+        
+        the_answer = num1 - num2
+        
+        qs("#problem_box").innerHTML = `${num1} - ${num2}`
+        
+    };
+    if( type == "m" ){ 
+        num1 = getRandomArbitrary(2, 10)
+        num2 = getRandomArbitrary(1, 10)
+        the_answer = num1 * num2
+    
+        qs("#problem_box").innerHTML = `${num1} X ${num2}`
+    };
+    if( type == "d" ){
+        num1 = null
+        num2 = null
+        while (true) {
+            num1 = getRandomArbitrary(2, 10)
+            num2 = getRandomArbitrary(2, 10)
+            if( isInt( num1 / num2 ) && num1 / num2 > 1 ) {
+                break
+            }
+            continue
+            
+        }
+        
+        the_answer = num1 / num2
+        
+        qs("#problem_box").innerHTML = `${num1} ÷ ${num2}`
+    };
+
+}
+
+function qs(str) {
+    return document.querySelector(str)
+}
+
+function qsa(str) {
+    return document.querySelectorAll(str)
+}
+
+function setmode(str) {
+    type = str   
+    if( type == "a" ){ qs("#mode_str").innerHTML = '덧셈'};
+    if( type == "s" ){ qs("#mode_str").innerHTML = '뺄셈'};
+    if( type == "m" ){ qs("#mode_str").innerHTML = '곱셈'};
+    if( type == "d" ){ qs("#mode_str").innerHTML = '나눗셈'};
+    load_new_problem()
+}
+
+
+qs("#answer_input").addEventListener("input", (event) => {
+    
+    if(  isNaN(event.srcElement.value)) {
+        // event.preventDefault()
+        event.srcElement.value = event.srcElement.value.replace(/\D/g,'');
+        console.log('test')
+        return
+    }
+    if( parseInt( event.srcElement.value) == the_answer ) {
+        event.srcElement.value = ""
+        load_new_problem()
+        return
+    }
+
+})
+
+
+load_new_problem()
+</script>
+
+</html>
